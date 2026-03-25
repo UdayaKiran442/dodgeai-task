@@ -1,6 +1,6 @@
-import { QueryPromptError, StoreMessagesInDBError } from "../exceptions/messages.exceptions";
+import { FetchChatHistoryError, FetchChatHistoryFromDBError, QueryPromptError, StoreMessagesInDBError } from "../exceptions/messages.exceptions";
 import { QueryServiceError } from "../exceptions/service.exceptions";
-import { storePromptAndResponseInDB } from "../repository/messages.repository";
+import { fetchChatHistoryFromDB, storePromptAndResponseInDB } from "../repository/messages.repository";
 import { IQuerySchema } from "../route/v1Router/message.route";
 import { queryService } from "../service/python.service";
 
@@ -22,5 +22,16 @@ export async function query(payload: IQuerySchema){
             throw error;
         }
         throw new QueryPromptError("Failed to process the query prompt", { cause: (error as Error).message })
+    }
+}
+
+export async function fetchChatHistory(chatId: string) {
+    try {
+       return  await fetchChatHistoryFromDB(chatId);
+    } catch (error) {
+        if (error instanceof FetchChatHistoryFromDBError) {
+            throw error;
+        }
+        throw new FetchChatHistoryError("Failed to fetch chat history", { cause: (error as Error).message })
     }
 }
