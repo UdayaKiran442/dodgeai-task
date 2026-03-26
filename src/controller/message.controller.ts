@@ -9,12 +9,13 @@ export async function query(payload: IQuerySchema){
         // call python service to get response
         const response = await queryService(payload.prompt);
         // store message and response in db
-        // TODO: run this in background
-        await storePromptAndResponseInDB({
-            prompt: payload.prompt,
-            response: response,
-            chatId: "chat_YuFNLdJgOg3GQUFSf_i1q"
-        })
+        (async () => {
+            storePromptAndResponseInDB({
+                prompt: payload.prompt,
+                response: response,
+                chatId: "chat_YuFNLdJgOg3GQUFSf_i1q"
+            })
+        })()
         return response;
 
     } catch (error) {

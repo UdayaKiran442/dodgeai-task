@@ -19,7 +19,7 @@ messageRouter.post('/query', async (c) => {
         }
         const payload = validation.data;
         const response = await query(payload);
-        return c.json({ success: true, data: response });
+        return c.json({ success: true, response });
     } catch (error) {
         if (error instanceof z.ZodError) {
             const errMessage = JSON.parse(error.message);
